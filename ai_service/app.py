@@ -11,19 +11,12 @@ from dotenv import load_dotenv
 from langchain.cache import SQLiteCache
 import time
 
-# ------------------------------
-# Setup
-# ------------------------------
 load_dotenv()
 app = FastAPI()
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 llm_cache = SQLiteCache(database_path="llm_cache.db")
 
-
-# ------------------------------
-# Loan Application Schema
-# ------------------------------
 class LoanApplication(BaseModel):
     name: str
     mobile: str
@@ -41,10 +34,6 @@ class LoanApplication(BaseModel):
     loanPurpose: str
     loanDuration: int
 
-
-# ------------------------------
-# Utility functions
-# ------------------------------
 def validate_aadhaar(aadhaar: str) -> bool:
     """Basic Aadhaar validation: 12 digits"""
     return bool(re.fullmatch(r"\d{12}", aadhaar))
@@ -54,27 +43,18 @@ def validate_pan(pan: str) -> bool:
     """Basic PAN validation: 5 letters + 4 digits + 1 letter"""
     return bool(re.fullmatch(r"[A-Z]{5}[0-9]{4}[A-Z]", pan))
 
-
-# ------------------------------
-# Root Endpoint
-# ------------------------------
 @app.get("/")
 def read_root():
     return {"message": "AI Service for Loan Underwriting"}
 
-
-# ------------------------------
-# Risk Score Endpoint
-# ------------------------------
 @app.post("/risk-score")
 def risk_score(app_data: LoanApplication):
-    # Aadhaar and PAN validation
+    
     if not validate_aadhaar(app_data.aadhaar):
         return {"risk_score": 0.0, "decision": "rejected", "reason": "Invalid Aadhaar"}
     if not validate_pan(app_data.pan):
         return {"risk_score": 0.0, "decision": "rejected", "reason": "Invalid PAN"}
 
-    # --- Rule-based risk score calculation ---
     payment_history = 0.9 if app_data.incomeSource.lower() == "salaried" else 0.7
     credit_utilization = min(float(app_data.loanAmount) / max(float(app_data.income), 1), 1)
     length_history = 0.7 if app_data.employer and len(app_data.employer) > 3 else 0.5
@@ -83,8 +63,6 @@ def risk_score(app_data: LoanApplication):
     credit_mix = 0.8 if app_data.loanPurpose.lower() in diverse_purposes else 0.6
 
     new_credit = min(float(app_data.loanDuration) / 60, 1)
-
-    # Weighted credit score
     credit_score = (
         payment_history * 0.35 +
         (1 - credit_utilization) * 0.30 +
@@ -128,12 +106,8 @@ def risk_score(app_data: LoanApplication):
         "explanation": explanation
     }
 
-
-# ------------------------------
-# Explanation Endpoint
-# ------------------------------
 @app.post("/explain")
-@limiter.limit("2/minute")  # Lower rate limit for Gemini endpoints
+@limiter.limit("2/minute")  
 async def explain_decision(request: Request):
     data = await request.json()
     decision = data.get("decision", "rejected")
@@ -157,19 +131,15 @@ async def explain_decision(request: Request):
                 return {"explanation": explanation}
             except Exception as e:
                 if "rate limit" in str(e).lower():
-                    time.sleep(2)  # Wait and retry
+                    time.sleep(2)
                 else:
                     return {"explanation": f"Error: {str(e)}"}
         return {"explanation": "Rate limit exceeded. Please wait and try again."}
     except Exception as e:
         return {"explanation": f"Error: {str(e)}"}
 
-
-# ------------------------------
-# Conversational Chatbot Endpoint
-# ------------------------------
 @app.post("/chat")
-@limiter.limit("2/minute")  # Lower rate limit for Gemini endpoints
+@limiter.limit("2/minute")  
 async def chat_endpoint(request: Request, data: dict = Body(...)):
     message = data.get("message", "")
     if not message or not isinstance(message, str):
@@ -189,14 +159,13 @@ async def chat_endpoint(request: Request, data: dict = Body(...)):
                 reply = response.text.strip() if hasattr(response, "text") else str(response)
                 if not reply:
                     reply = "Sorry, I couldn't generate a response."
-                # Optionally trim to 2-3 sentences max
                 if len(reply.split('. ')) > 3:
                     reply = '. '.join(reply.split('. ')[:3]) + '.'
                 llm_cache.update("gemini-1.5-flash", norm_prompt, reply)
                 return {"reply": reply}
             except Exception as e:
                 if "rate limit" in str(e).lower():
-                    time.sleep(2)  # Wait and retry
+                    time.sleep(2)  
                 else:
                     return {"reply": f"Error: {str(e)}"}
         return {"reply": "Rate limit exceeded. Please wait and try again."}

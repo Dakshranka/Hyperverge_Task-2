@@ -55,7 +55,6 @@ a:hover {
   letter-spacing: 1px;
 }
 
-/* Subtitle */
 .App-header p {
   font-size: 1.2rem;
   max-width: 600px;
@@ -63,7 +62,6 @@ a:hover {
   opacity: 0.9;
 }
 
-/* Buttons */
 .App-button {
   margin-top: 2rem;
   padding: 0.9rem 2rem;
@@ -82,12 +80,10 @@ a:hover {
   background: linear-gradient(90deg, #185a9d 0%, #43cea2 100%);
 }
 
-/* Remove spinning logo */
 .App-logo {
   display: none;
 }
 
-/* Links */
 .App-link {
   color: #ffd700;
   font-weight: 500;

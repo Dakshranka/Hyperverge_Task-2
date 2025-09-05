@@ -28,7 +28,7 @@ const LoanApplicationForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Handle input changes
+  
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
     if (type === 'checkbox') {
@@ -40,7 +40,7 @@ const LoanApplicationForm = () => {
     }
   };
 
-  // Handle form submit
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -49,10 +49,10 @@ const LoanApplicationForm = () => {
 
     try {
       let res;
-      const token = localStorage.getItem('token'); // if you use auth
+  const token = localStorage.getItem('token');
 
       if (form.documents && form.documents.length > 0) {
-        // If user uploaded documents → send multipart/form-data
+        
         const formData = new FormData();
         Object.entries(form).forEach(([key, value]) => {
           if (key === 'documents') {
@@ -71,7 +71,7 @@ const LoanApplicationForm = () => {
           }
         });
       } else {
-        // Otherwise → send JSON
+        
         const { documents, ...jsonData } = form;
         res = await axios.post('/api/loan', jsonData, {
           headers: {

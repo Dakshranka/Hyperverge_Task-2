@@ -11,7 +11,7 @@ const KYCUpload = () => {
   const [loading, setLoading] = useState(false);
   const [userInput, setUserInput] = useState({ name: '', aadhaar: '', pan: '' });
 
-  // Handle PAN upload
+  
   const handlePanUpload = async (e) => {
     const selectedFile = e.target.files[0];
     setStatus('');
@@ -20,12 +20,12 @@ const KYCUpload = () => {
       setLoading(true);
       const { data: { text } } = await Tesseract.recognize(selectedFile, 'eng');
       const panMatch = text.match(/[A-Z]{5}[0-9]{4}[A-Z]/);
-      // Improved PAN name extraction: look for first non-empty line after the PAN number (name is usually below the image)
+      
       let panName = '';
       if (panMatch) {
         const lines = text.split('\n');
         const panIndex = lines.findIndex(line => line.includes(panMatch[0]));
-        // Try to find the first non-empty line after the PAN number
+        
         for (let i = panIndex + 1; i < lines.length; i++) {
           const line = lines[i].trim();
           if (line && /^[A-Z ]{5,}$/.test(line) && line.split(' ').length >= 2 && !/[0-9]/.test(line)) {
@@ -33,7 +33,7 @@ const KYCUpload = () => {
             break;
           }
         }
-        // Fallback: if not found, try above PAN number as before
+        
         if (!panName) {
           for (let i = panIndex - 1; i >= 0; i--) {
             const line = lines[i].trim();
@@ -49,7 +49,7 @@ const KYCUpload = () => {
     }
   };
 
-  // Handle Aadhaar upload
+  
   const handleAadhaarUpload = async (e) => {
     const selectedFile = e.target.files[0];
     setStatus('');
@@ -58,7 +58,7 @@ const KYCUpload = () => {
       setLoading(true);
       const { data: { text } } = await Tesseract.recognize(selectedFile, 'eng');
       const aadhaarMatch = text.match(/\b\d{4}\s?\d{4}\s?\d{4}\b/);
-      // Try to extract name (look for first line with letters)
+      
       let aadhaarName = '';
       const lines = text.split('\n');
       for (let line of lines) {
@@ -89,7 +89,7 @@ const KYCUpload = () => {
       valid = false;
       msg += 'PAN does not match. ';
     }
-    // Name must match both PAN and Aadhaar name, and both must be present
+    
     if (
       !ocrResult.panName || !ocrResult.aadhaarName ||
       userInput.name.toLowerCase() !== ocrResult.panName.toLowerCase() ||

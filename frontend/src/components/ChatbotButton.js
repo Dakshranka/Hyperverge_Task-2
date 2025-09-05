@@ -34,7 +34,7 @@ const ChatbotButton = () => {
     setLoading(false);
   };
 
-  // Auto-scroll to bottom when messages change
+  
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });

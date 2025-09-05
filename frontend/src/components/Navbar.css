@@ -1,4 +1,4 @@
-/* Reset */
+
 * {
   box-sizing: border-box;
 }
@@ -6,8 +6,6 @@ body, html {
   margin: 0;
   padding: 0;
 }
-
-/* Navbar container */
 .navbar {
   display: flex;
   align-items: center;
@@ -21,15 +19,11 @@ body, html {
   border-radius: 0 0 1.2rem 1.2rem;
   box-shadow: 0 4px 16px rgba(0,0,0,0.1);
 }
-
-/* Left & Right sections */
 .navbar-left, .navbar-right {
   display: flex;
   align-items: center;
   gap: 1.2rem;
 }
-
-/* Center brand */
 .navbar-center {
   flex: 1;
   display: flex;
@@ -42,8 +36,6 @@ body, html {
   color: #fff;
   text-decoration: none;
 }
-
-/* Nav links as text */
 .nav-link {
   color: #fff;
   font-weight: 500;
@@ -58,8 +50,6 @@ body, html {
 .nav-link:hover {
   color: #ff69b4;
 }
-
-/* Logout button same as link */
 .logout {
   font: inherit;
 }

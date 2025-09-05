@@ -12,13 +12,10 @@ const Tesseract = require('tesseract.js');
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-// Connect to MongoDB Atlas using new cluster URI
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// TEMP: Remove all users (for development only)
 app.delete('/api/dev/remove-all-users', async (req, res) => {
   try {
     await require('./models/User').deleteMany({});
@@ -28,7 +25,6 @@ app.delete('/api/dev/remove-all-users', async (req, res) => {
   }
 });
 
-// JWT authentication middleware
 function authenticateJWT(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -41,18 +37,14 @@ function authenticateJWT(req, res, next) {
     next();
   });
 }
-// Protected test route
 app.get('/api/protected', authenticateJWT, (req, res) => {
   res.json({ message: 'JWT is working!', user: req.user });
 });
-
-
-// LoanApplication model
 const LoanApplication = require('./models/LoanApplication');
 const User = require('./models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-// User registration
+
 app.post('/api/register', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -75,7 +67,6 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-// User login
 app.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -97,33 +88,24 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Loan application route
 app.post('/api/loan', upload.array('documents'), async (req, res) => {
   try {
-    // If multipart/form-data, fields are in req.body, files in req.files
     const appData = { ...req.body };
-    // Convert numeric fields
     if (appData.income) appData.income = Number(appData.income);
     if (appData.loanAmount) appData.loanAmount = Number(appData.loanAmount);
     if (appData.loanDuration) appData.loanDuration = Number(appData.loanDuration);
-    // Attach file paths if documents uploaded
     if (req.files && req.files.length > 0) {
       appData.documents = req.files.map(f => f.path);
     }
     const loanApp = new LoanApplication(appData);
     await loanApp.save();
-
-    // Call AI microservice for risk scoring
     const riskRes = await axios.post('http://127.0.0.1:8000/risk-score', appData);
     loanApp.riskScore = riskRes.data.risk_score;
     loanApp.decision = riskRes.data.decision;
     await loanApp.save();
-
-    // Call AI microservice for explanation
     const explainRes = await axios.post('http://127.0.0.1:8000/explain', appData);
     loanApp.explanation = explainRes.data.explanation;
     await loanApp.save();
-
     res.status(201).json({
       message: 'Loan application processed',
       id: loanApp._id,
@@ -135,15 +117,12 @@ app.post('/api/loan', upload.array('documents'), async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-
-// Chatbot route: proxies user message to AI microservice
 app.post('/api/chatbot', async (req, res) => {
   try {
     const { message } = req.body;
     if (!message || typeof message !== 'string') {
       return res.status(400).json({ error: 'Message is required.' });
     }
-    // Call AI microservice (assume /chat endpoint exists)
     const aiRes = await require('axios').post('http://127.0.0.1:8000/chat', { message });
     res.json({ reply: aiRes.data.reply });
   } catch (err) {

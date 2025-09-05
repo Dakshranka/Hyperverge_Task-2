@@ -14,7 +14,7 @@ const LoanAssistant = () => {
     setMessages([...messages, { sender: 'user', text: input }]);
     setLoading(true);
     try {
-      // Call backend AI chat endpoint (to be implemented)
+      
       const token = localStorage.getItem('token');
       const res = await axios.post('/api/loan-assistant', { message: input }, {
         headers: { Authorization: `Bearer ${token}` }
