@@ -1,0 +1,102 @@
+
+body {
+  background: linear-gradient(135deg, #f8eaff 0%, #eaf6ff 100%);
+  min-height: 100vh;
+  color: #2d2d2d;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #ff69b4;
+  font-weight: 700;
+}
+
+a {
+  color: #2d2d2d;
+  text-decoration: none;
+  transition: color 0.18s;
+}
+a:hover {
+  color: #ff69b4;
+}
+
+.app-main-content {
+  padding: 2rem 0;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.App {
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.App-header {
+  flex: 1;
+  background: linear-gradient(135deg, #f8eaff 0%, #eaf6ff 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #2575fc;
+  padding: 2rem;
+}
+
+.App-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+}
+
+/* Subtitle */
+.App-header p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+/* Buttons */
+.App-button {
+  margin-top: 2rem;
+  padding: 0.9rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.8rem;
+  background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.App-button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(90deg, #185a9d 0%, #43cea2 100%);
+}
+
+/* Remove spinning logo */
+.App-logo {
+  display: none;
+}
+
+/* Links */
+.App-link {
+  color: #ffd700;
+  font-weight: 500;
+  text-decoration: none;
+  margin-top: 1rem;
+  display: inline-block;
+  transition: color 0.2s ease;
+}
+
+.App-link:hover {
+  color: #fff;
+}

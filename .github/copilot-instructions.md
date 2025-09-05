@@ -1,0 +1,3 @@
+- [ ] Project scaffolded: frontend, backend, ai_service directories created.
+- [ ] README.md created with project overview.
+- [ ] Next: Scaffold React frontend, Node.js backend, Python AI microservice.

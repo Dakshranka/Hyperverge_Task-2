@@ -1,0 +1,96 @@
+/* Modern KYCUpload UI/UX */
+.kyc-bg {
+  min-height: 100vh;
+  background: linear-gradient(120deg, #43cea2 0%, #185a9d 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.kyc-center {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.kyc-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.15);
+  padding: 2.5rem 2rem;
+  width: 350px;
+  max-width: 90vw;
+  transition: box-shadow 0.3s;
+}
+.kyc-card:hover {
+  box-shadow: 0 12px 40px rgba(44, 62, 80, 0.25);
+}
+.kyc-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #185a9d;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.kyc-field {
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+}
+.kyc-field label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+.kyc-field input {
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+.kyc-field input:focus {
+  border-color: #185a9d;
+  outline: none;
+}
+.kyc-btn {
+  width: 100%;
+  padding: 0.8rem;
+  background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.kyc-btn:disabled {
+  background: #b2bec3;
+  cursor: not-allowed;
+}
+.kyc-error {
+  margin-top: 1rem;
+  color: #d63031;
+  background: #ffeaea;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  text-align: center;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(214, 48, 49, 0.08);
+}
+.kyc-success {
+  margin-top: 1rem;
+  color: #00b894;
+  background: #eafaf1;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  text-align: center;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 184, 148, 0.08);
+}
+@media (max-width: 500px) {
+  .kyc-card {
+    padding: 1.5rem 0.5rem;
+    width: 95vw;
+  }
+}
